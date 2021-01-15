@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+    <Resource id="proyectoDS" type="DataSource">
+    #  MySQL example
+    #
+    #  This connector will not work until you download the driver at:
+    #  http://www.mysql.com/downloads/api-jdbc-stable.html
+
+    JdbcDriver  com.mysql.cj.jdbc.Driver
+    JdbcUrl jdbc:mysql://localhost:3306/proyectotemporal?serverTimezone=
+    UserName    root
+    password    12345
+</Resource>
+</resources>
