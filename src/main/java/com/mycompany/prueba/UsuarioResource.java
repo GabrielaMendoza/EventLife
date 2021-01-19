@@ -42,7 +42,7 @@ public class UsuarioResource {
 
     @Context
     private UriInfo context;
-    @Resource(name = "")
+    @Resource(name = "proyectoDS")
     private DataSource ds;
 
     public UsuarioResource() {
@@ -128,11 +128,27 @@ public class UsuarioResource {
     @Consumes("application/json; charset=utf-8")
     public Response postUsuario(Usuario u) {
         try {
-            if (u.getNombre().isEmpty()) {
+            if (u.getNombre().isEmpty()|| u.getNombre().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
             } else if (u.getNombre().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } else {
+            }  if (u.getApellido().isEmpty()|| u.getApellido().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un apellido").build();
+            } else if (u.getApellido().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            } if (u.getCorreo().isEmpty()|| u.getCorreo().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un correo").build();
+            } else if (u.getCorreo().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            } if (u.getTelefono().isEmpty()|| u.getTelefono().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita numero de telefono").build();
+            } else if (u.getTelefono().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            } if (u.getClave().isEmpty()|| u.getClave().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una clave").build();
+            } else if (u.getClave().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }  else {
                 Connection con = this.ds.getConnection();
                 String sql = "INSERT INTO usuario(idUsuario, nombre, apellido, telefono, correo, clave, direccion, foto)VALUE(?,?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
@@ -161,6 +177,18 @@ public class UsuarioResource {
             if (u.getNombre().isEmpty() || u.getNombre().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
             } else if (u.getNombre().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }  if (u.getApellido().isEmpty()|| u.getApellido().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un apellido").build();
+            } else if (u.getApellido().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            } if (u.getCorreo().isEmpty()|| u.getCorreo().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un correo").build();
+            } else if (u.getCorreo().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            } if (u.getTelefono().isEmpty()|| u.getTelefono().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita numero de telefono").build();
+            } else if (u.getTelefono().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
