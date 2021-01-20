@@ -12,16 +12,18 @@ public class Items {
     private String descripcion;
     private String foto;
     private Integer precio;
-
+    private Integer idEvento;
+    
     public Items() {
     }
 
-    public Items(Integer idItems, String nombre, String descripcion, String foto, Integer precio) {
+    public Items(Integer idItems, String nombre, String descripcion, String foto, Integer precio,Integer idEvento) {
         this.idItems = idItems;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.foto = foto;
         this.precio = precio;
+        this.idEvento = idEvento;
     }
 
     public Integer getIdItems() {
@@ -61,6 +63,16 @@ public class Items {
 
     public void setPrecio(Integer precio) {
         this.precio = precio;
+    }
+
+    
+
+    public Integer getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(Integer idEvento) {
+        this.idEvento = idEvento;
     }
 
 }

@@ -68,8 +68,9 @@ public class ItemsResource {
                 String des = rs.getString("descripcion");
                 String foto = rs.getString("foto");
                 Integer pre = rs.getInt("precio");
+                Integer idE = rs.getInt("idEvento");
 
-                Items i = new Items(idI, nom, des, foto, pre);
+                Items i = new Items(idI, nom, des, foto, pre, idE);
                 lista.add(i);
             }
             return Response.status(Response.Status.OK).entity(lista).build();
@@ -99,8 +100,9 @@ public class ItemsResource {
                 String des = rs.getString("descripcion");
                 String foto = rs.getString("foto");
                 Integer pre = rs.getInt("precio");
-                
-                Items i = new Items(idI, nom, des, foto, pre);
+                Integer idE = rs.getInt("idEvento");
+
+                Items i = new Items(idI, nom, des, foto, pre, idE);
 
                 return Response.status(Response.Status.OK).entity(i).build();
             } else {
@@ -129,13 +131,14 @@ public class ItemsResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO items(idItems, nombre, descripcion, foto, precio)VALUE(?,?,?,?,?)";
+                String sql = "INSERT INTO items(idItems, nombre, descripcion, foto, precio,IdEvento)VALUE(?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
                 stm.setInt(1, i.getIdItems());
                 stm.setString(2, i.getNombre());
                 stm.setString(3, i.getDescripcion());
-               stm.setString(4, i.getFoto());
-               stm.setInt(5, i.getPrecio());
+                stm.setString(4, i.getFoto());
+                stm.setInt(5, i.getPrecio());
+                stm.setInt(6, i.getIdEvento());
                 stm.execute();
                 return Response.status(Response.Status.CREATED).build();
             }
@@ -161,13 +164,14 @@ public class ItemsResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
-                String sql = "UPDATE items SET  nombre = ?, descripcion = ?,foto = ?, precio = ? WHERE idItems = ?";
+                String sql = "UPDATE items SET  nombre = ?, descripcion = ?,foto = ?, precio = ?,IdEvento=? WHERE idItems = ?";
                 PreparedStatement stm = con.prepareStatement(sql);
                 stm.setString(1, i.getNombre());
                 stm.setString(2, i.getDescripcion());
-                  stm.setString(3, i.getFoto());
-                  stm.setInt(4, i.getPrecio());
-                stm.setInt(5, i.getIdItems());
+                stm.setString(3, i.getFoto());
+                stm.setInt(4, i.getPrecio());
+                stm.setInt(5, i.getIdEvento());
+                stm.setInt(6, i.getIdItems());
                 stm.execute();
                 return Response.status(Response.Status.OK).build();
             }
