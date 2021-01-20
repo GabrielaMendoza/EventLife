@@ -5,33 +5,33 @@
  */
 package com.mycompany.prueba.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Evento {
 
     private Integer idEvento;
     private String nombre;
     private String descripcion;
-    private Date fecha_hora_inicio;
-    private Date fecha_hora_fin;
+    private String fechaHoraInicio;
+    private String fechaHoraFin;
     private String telefono;
-    private String coordenada_longitud;
-    private String coordenada_latitud;
+    private String coordenadaLongitud;
+    private String coordenadaLatitud;
     private Integer idCategoria;
     private Integer idUsuario;
 
     public Evento() {
     }
 
-    public Evento(Integer idEvento, String nombre, String descripcion, Date fecha_hora_inicio, Date fecha_hora_fin, String telefono, String coordenada_longitud, String coordenada_latitud, Integer idCategoria, Integer idUsuario) {
+    public Evento(Integer idEvento, String nombre, String descripcion, String fecha_hora_inicio, String fecha_hora_fin, String telefono, String coordenada_longitud, String coordenada_latitud, Integer idCategoria, Integer idUsuario) {
         this.idEvento = idEvento;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.fecha_hora_inicio = fecha_hora_inicio;
-        this.fecha_hora_fin = fecha_hora_fin;
+        this.fechaHoraInicio = fecha_hora_inicio;
+        this.fechaHoraFin = fecha_hora_fin;
         this.telefono = telefono;
-         this.coordenada_longitud = coordenada_longitud;
-        this.coordenada_latitud = coordenada_latitud;
+         this.coordenadaLongitud = coordenada_longitud;
+        this.coordenadaLatitud = coordenada_latitud;
         this.idCategoria = idCategoria;
         this.idUsuario = idUsuario;
        
@@ -61,20 +61,20 @@ public class Evento {
         this.descripcion = descripcion;
     }
 
-    public Date getFecha_hora_inicio() {
-        return fecha_hora_inicio;
+    public String getFechaHoraInicio() {
+        return fechaHoraInicio;
     }
 
-    public void setFecha_hora_inicio(Date fecha_hora_inicio) {
-        this.fecha_hora_inicio = fecha_hora_inicio;
+    public void setFechaHoraInicio(String fechaHoraInicio) {
+        this.fechaHoraInicio = fechaHoraInicio;
     }
 
-    public Date getFecha_hora_fin() {
-        return fecha_hora_fin;
+    public String getFechaHoraFin() {
+        return fechaHoraFin;
     }
 
-    public void setFecha_hora_fin(Date fecha_hora_fin) {
-        this.fecha_hora_fin = fecha_hora_fin;
+    public void setFechaHoraFin(String fechaHoraFin) {
+        this.fechaHoraFin = fechaHoraFin;
     }
 
     public String getTelefono() {
@@ -85,20 +85,20 @@ public class Evento {
         this.telefono = telefono;
     }
 
-    public String getCoordenada_latitud() {
-        return coordenada_latitud;
+    public String getCoordenadaLatitud() {
+        return coordenadaLatitud;
     }
 
-    public void setCoordenada_latitud(String coordenada_latitud) {
-        this.coordenada_latitud = coordenada_latitud;
+    public void setCoordenadaLatitud(String coordenadaLatitud) {
+        this.coordenadaLatitud = coordenadaLatitud;
     }
 
-    public String getCoordenada_longitud() {
-        return coordenada_longitud;
+    public String getCoordenadaLongitud() {
+        return coordenadaLongitud;
     }
 
-    public void setCoordenada_longitud(String coordenada_longitud) {
-        this.coordenada_longitud = coordenada_longitud;
+    public void setCoordenadaLongitud(String coordenadaLongitud) {
+        this.coordenadaLongitud = coordenadaLongitud;
     }
 
     public Integer getIdCategoria() {

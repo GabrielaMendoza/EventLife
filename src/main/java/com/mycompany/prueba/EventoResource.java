@@ -5,9 +5,10 @@
  */
 package com.mycompany.prueba;
 
+
 import com.mycompany.prueba.dto.Evento;
+import com.mycompany.prueba.dto.Items;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -67,8 +68,8 @@ public class EventoResource {
                 Integer idE = rs.getInt("idEvento");
                 String nom = rs.getString("nombre");
                 String des = rs.getString("descripcion");
-                Date feInicio = rs.getDate("fecha_hora_inicio");
-                Date feFin = rs.getDate(" fecha_hora_fin");
+                String feInicio = rs.getString("fecha_hora_inicio");
+                String feFin = rs.getString("fecha_hora_fin");
                 String tel = rs.getString("telefono");
                 String coLo = rs.getString("coordenada_longitud");
                 String coLati = rs.getString("coordenada_latitud");
@@ -103,8 +104,8 @@ public class EventoResource {
                 Integer idE = rs.getInt("idEvento");
                 String nom = rs.getString("nombre");
                 String des = rs.getString("descripcion");
-                Date feInicio = rs.getDate("fecha_hora_inicio");
-                Date feFin = rs.getDate("fecha_hora_fin");
+                String feInicio = rs.getString("fecha_hora_inicio");
+                String feFin = rs.getString("fecha_hora_fin");
                 String tel = rs.getString("telefono");
                 String coLo = rs.getString("coordenada_longitud");
                 String coLati = rs.getString("coordenada_latitud");
@@ -138,18 +139,18 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO evento(idEvento, nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud, idCategoria, idUsuario)VALUE(?,?,?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO evento(nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud, idCategoria, idUsuario)VALUE(?,?,?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
-                stm.setInt(1, e.getIdEvento());
-                stm.setString(2, e.getNombre());
-                stm.setString(3, e.getDescripcion());
-                stm.setDate(4, e.getFecha_hora_inicio());
-                stm.setDate(5, e.getFecha_hora_fin());
-                stm.setString(6, e.getTelefono());
-                stm.setString(7, e.getCoordenada_longitud());
-                stm.setString(8, e.getCoordenada_latitud());
-                stm.setInt(9, e.getIdCategoria());
-                stm.setInt(10, e.getIdUsuario());
+               
+                stm.setString(1, e.getNombre());
+                stm.setString(2, e.getDescripcion());
+                stm.setString(3, e.getFechaHoraInicio());
+                stm.setString(4, e.getFechaHoraFin());
+                stm.setString(5, e.getTelefono());
+                stm.setString(6, e.getCoordenadaLongitud());
+                stm.setString(7, e.getCoordenadaLatitud());
+                stm.setInt(8, e.getIdCategoria());
+                stm.setInt(9, e.getIdUsuario());
                 stm.execute();
 
                 return Response.status(Response.Status.CREATED).build();
@@ -181,11 +182,11 @@ public class EventoResource {
 
                 stm.setString(1, e.getNombre());
                 stm.setString(2, e.getDescripcion());
-                stm.setDate(3, e.getFecha_hora_inicio());
-                stm.setDate(4, e.getFecha_hora_fin());
+                stm.setString(3, e.getFechaHoraInicio());
+                stm.setString(4, e.getFechaHoraFin());
                 stm.setString(5, e.getTelefono());
-                stm.setString(6, e.getCoordenada_longitud());
-                stm.setString(7, e.getCoordenada_latitud());
+                stm.setString(6, e.getCoordenadaLongitud());
+                stm.setString(7, e.getCoordenadaLatitud());
                 stm.setInt(8, e.getIdCategoria());
                 stm.setInt(9, e.getIdUsuario());
                 stm.setInt(10, e.getIdEvento());
@@ -223,40 +224,36 @@ public class EventoResource {
     }
 
     @GET
-    @Path("{idE}/items")
+    @Path("{idi}/items")
     @Produces("application/json; charset=utf-8")
-    public Response getItemsPorEvento(@QueryParam("idE") Integer idE) {
-          try {
-            ArrayList<Evento> lista = new ArrayList<>();
+    public Response getItemsPorEvento(@PathParam("idi") Integer idi) {
+        try {
+            ArrayList<Items> lista = new ArrayList<>();
             Connection con = this.ds.getConnection();
-            ResultSet rs = null;
-            if ( idE == null) {
-                String sql = "SELECT * FROM evento";
-                Statement stm = con.createStatement();
-                rs = stm.executeQuery(sql);
+            
+            if (idi == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("ID de evento inválido").build();
             } else {
-               String sql = "SELECT * FROM items WHERE idEvento =?";;
+                String sql = "SELECT * FROM items WHERE idEvento = ?";;
                 PreparedStatement stm = con.prepareStatement(sql);
-                stm.setString(1, "%" +  idE + "%");
-            }
-            while (rs.next()) {
-                Integer idEv = rs.getInt("idEvento");
+                stm.setInt(1, idi);
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                Integer idI = rs.getInt("idItems");
                 String nom = rs.getString("nombre");
                 String des = rs.getString("descripcion");
-                Date feInicio = rs.getDate("fecha_hora_inicio");
-                Date feFin = rs.getDate(" fecha_hora_fin");
-                String tel = rs.getString("telefono");
-                String coLo = rs.getString("coordenada_longitud");
-                String coLati = rs.getString("coordenada_latitud");
-                Integer idC = rs.getInt("idCategoria");
-                Integer idU = rs.getInt("idUsuario");
+                String foto = rs.getString("foto");
+                Integer pre = rs.getInt("precio");
+                Integer idE = rs.getInt("idEvento");
 
-                Evento e = new Evento(idEv, nom, des, feInicio, feFin, tel, coLo, coLati, idC, idU);
-                lista.add(e);
+                Items i = new Items(idI, nom, des, foto, pre, idE);
+                    
+                    lista.add(i);
+                }
+                return Response.status(Response.Status.OK).entity(lista).build();
             }
-            return Response.status(Response.Status.OK).entity(lista).build();
 
-          } catch (Exception ex) {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al consultar ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 

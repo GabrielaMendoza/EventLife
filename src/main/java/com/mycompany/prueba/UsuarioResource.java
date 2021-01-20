@@ -28,6 +28,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * REST Web Service
@@ -157,7 +158,8 @@ public class UsuarioResource {
                 stm.setString(3, u.getApellido());
                 stm.setString(4, u.getTelefono());
                 stm.setString(5, u.getCorreo());
-                stm.setString(6, u.getClave());
+                String claveSHA = DigestUtils.sha256Hex(u.getClave());
+                stm.setString(6, claveSHA);
                 stm.setString(7, u.getDireccion());
                 stm.setString(8, u.getFoto());
                 stm.execute();
@@ -186,9 +188,9 @@ public class UsuarioResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un correo").build();
             } else if (u.getCorreo().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } if (u.getTelefono().isEmpty()|| u.getTelefono().isBlank()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita numero de telefono").build();
-            } else if (u.getTelefono().length() > 45) {
+            } if (u.getClave().isEmpty()|| u.getClave().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una clave").build();
+            } else if (u.getClave().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
@@ -198,7 +200,8 @@ public class UsuarioResource {
                 stm.setString(2, u.getApellido());
                 stm.setString(3, u.getTelefono());
                 stm.setString(4, u.getCorreo());
-                stm.setString(5, u.getClave());
+                String claveSHA = DigestUtils.sha256Hex(u.getClave());
+                stm.setString(5, claveSHA);
                 stm.setString(6, u.getDireccion());
                 stm.setString(7, u.getFoto());
                 stm.setInt(8, u.getIdUsuario());
