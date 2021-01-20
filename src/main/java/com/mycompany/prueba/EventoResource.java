@@ -7,6 +7,7 @@ package com.mycompany.prueba;
 
 import com.mycompany.prueba.dto.Evento;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -66,8 +67,8 @@ public class EventoResource {
                 Integer idE = rs.getInt("idEvento");
                 String nom = rs.getString("nombre");
                 String des = rs.getString("descripcion");
-                String feInicio = rs.getString(" fecha_hora_inicio");
-                String feFin = rs.getString(" fecha_hora_fin");
+                Date feInicio = rs.getDate("fecha_hora_inicio");
+                Date feFin = rs.getDate(" fecha_hora_fin");
                 String tel = rs.getString("telefono");
                 String coLo = rs.getString("coordenada_longitud");
                 String coLati = rs.getString("coordenada_latitud");
@@ -102,8 +103,8 @@ public class EventoResource {
                 Integer idE = rs.getInt("idEvento");
                 String nom = rs.getString("nombre");
                 String des = rs.getString("descripcion");
-                String feInicio = rs.getString("fecha_hora_inicio");
-                String feFin = rs.getString("fecha_hora_fin");
+                Date feInicio = rs.getDate("fecha_hora_inicio");
+                Date feFin = rs.getDate("fecha_hora_fin");
                 String tel = rs.getString("telefono");
                 String coLo = rs.getString("coordenada_longitud");
                 String coLati = rs.getString("coordenada_latitud");
@@ -137,13 +138,13 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO evento(idEvento, nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud,oordenada_latitud, idCategoria, idUsuario)VALUE(?,?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO evento(idEvento, nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud, idCategoria, idUsuario)VALUE(?,?,?,?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
                 stm.setInt(1, e.getIdEvento());
                 stm.setString(2, e.getNombre());
                 stm.setString(3, e.getDescripcion());
-                stm.setString(4, e.getFecha_hora_inicio());
-                stm.setString(5, e.getFecha_hora_fin());
+                stm.setDate(4, e.getFecha_hora_inicio());
+                stm.setDate(5, e.getFecha_hora_fin());
                 stm.setString(6, e.getTelefono());
                 stm.setString(7, e.getCoordenada_longitud());
                 stm.setString(8, e.getCoordenada_latitud());
@@ -175,13 +176,13 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
-                String sql = "UPDATE evento SET  nombre = ?, descripcion = ?, fecha_hora_inicio=?, fecha_hora_fin =? telefono = ?, coordenada_longitud=?,coordenada_latitud=?, idCategoria=?, idUsuario =?  WHERE idEvento = ?";
+                String sql = "UPDATE evento SET  nombre = ?, descripcion = ?, fecha_hora_inicio=?, fecha_hora_fin=?, telefono = ?, coordenada_longitud=?, coordenada_latitud=?, idCategoria=?, idUsuario =?  WHERE idEvento = ?";
                 PreparedStatement stm = con.prepareStatement(sql);
 
                 stm.setString(1, e.getNombre());
                 stm.setString(2, e.getDescripcion());
-                stm.setString(3, e.getFecha_hora_inicio());
-                stm.setString(4, e.getFecha_hora_fin());
+                stm.setDate(3, e.getFecha_hora_inicio());
+                stm.setDate(4, e.getFecha_hora_fin());
                 stm.setString(5, e.getTelefono());
                 stm.setString(6, e.getCoordenada_longitud());
                 stm.setString(7, e.getCoordenada_latitud());
@@ -225,14 +226,38 @@ public class EventoResource {
     @Path("{idE}/items")
     @Produces("application/json; charset=utf-8")
     public Response getItemsPorEvento(@QueryParam("idE") Integer idE) {
-        try {
+          try {
+            ArrayList<Evento> lista = new ArrayList<>();
             Connection con = this.ds.getConnection();
-            String sql = "SELECT * FROM items WHERE idEvento =?";
-            PreparedStatement stm = con.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
-            return Response.status(Response.Status.OK).build();
-        } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Error al eliminar", ex);
+            ResultSet rs = null;
+            if ( idE == null) {
+                String sql = "SELECT * FROM evento";
+                Statement stm = con.createStatement();
+                rs = stm.executeQuery(sql);
+            } else {
+               String sql = "SELECT * FROM items WHERE idEvento =?";;
+                PreparedStatement stm = con.prepareStatement(sql);
+                stm.setString(1, "%" +  idE + "%");
+            }
+            while (rs.next()) {
+                Integer idEv = rs.getInt("idEvento");
+                String nom = rs.getString("nombre");
+                String des = rs.getString("descripcion");
+                Date feInicio = rs.getDate("fecha_hora_inicio");
+                Date feFin = rs.getDate(" fecha_hora_fin");
+                String tel = rs.getString("telefono");
+                String coLo = rs.getString("coordenada_longitud");
+                String coLati = rs.getString("coordenada_latitud");
+                Integer idC = rs.getInt("idCategoria");
+                Integer idU = rs.getInt("idUsuario");
+
+                Evento e = new Evento(idEv, nom, des, feInicio, feFin, tel, coLo, coLati, idC, idU);
+                lista.add(e);
+            }
+            return Response.status(Response.Status.OK).entity(lista).build();
+
+          } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Error al consultar ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 
         }

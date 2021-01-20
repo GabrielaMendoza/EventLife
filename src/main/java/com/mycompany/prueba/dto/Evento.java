@@ -5,13 +5,15 @@
  */
 package com.mycompany.prueba.dto;
 
+import java.sql.Date;
+
 public class Evento {
 
     private Integer idEvento;
     private String nombre;
     private String descripcion;
-    private String fecha_hora_inicio;
-    private String fecha_hora_fin;
+    private Date fecha_hora_inicio;
+    private Date fecha_hora_fin;
     private String telefono;
     private String coordenada_longitud;
     private String coordenada_latitud;
@@ -21,7 +23,7 @@ public class Evento {
     public Evento() {
     }
 
-    public Evento(Integer idEvento, String nombre, String descripcion, String fecha_hora_inicio, String fecha_hora_fin, String telefono, String coordenada_longitud, String coordenada_latitud, Integer idCategoria, Integer idUsuario) {
+    public Evento(Integer idEvento, String nombre, String descripcion, Date fecha_hora_inicio, Date fecha_hora_fin, String telefono, String coordenada_longitud, String coordenada_latitud, Integer idCategoria, Integer idUsuario) {
         this.idEvento = idEvento;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -59,19 +61,19 @@ public class Evento {
         this.descripcion = descripcion;
     }
 
-    public String getFecha_hora_inicio() {
+    public Date getFecha_hora_inicio() {
         return fecha_hora_inicio;
     }
 
-    public void setFecha_hora_inicio(String fecha_hora_inicio) {
+    public void setFecha_hora_inicio(Date fecha_hora_inicio) {
         this.fecha_hora_inicio = fecha_hora_inicio;
     }
 
-    public String getFecha_hora_fin() {
+    public Date getFecha_hora_fin() {
         return fecha_hora_fin;
     }
 
-    public void setFecha_hora_fin(String fecha_hora_fin) {
+    public void setFecha_hora_fin(Date fecha_hora_fin) {
         this.fecha_hora_fin = fecha_hora_fin;
     }
 
