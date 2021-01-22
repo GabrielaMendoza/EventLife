@@ -17,7 +17,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
@@ -42,73 +44,44 @@ public class LoginResource {
     public LoginResource() {
     }
 
-    @Produces("application/json; charset=utf-8")
-
-    public Response loginReUsuario(Usuario u) {
-        if (u.getNombre().isEmpty() || u.getNombre().isBlank()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
-        } else if (u.getNombre().length() > 45) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-        }
-        if (u.getApellido().isEmpty() || u.getApellido().isBlank()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un apellido").build();
-        } else if (u.getApellido().length() > 45) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-
-        } else {
-            try {
-                Connection con = this.ds.getConnection();
-                String sql = "SELECT * FROM usuario WHERE nombre LIKE ? OR apellido LIKE ? OR telefono LIKE ? OR correo LIKE ? OR clave LIKE ? OR direccion LIKE ?";
-                PreparedStatement stm = con.prepareStatement(sql);
-                stm.setString(2, u.getNombre());
-                stm.setString(3, u.getApellido());
-                stm.setString(4, u.getTelefono());
-                stm.setString(5, u.getCorreo());
-                String claveSHA = DigestUtils.sha256Hex(u.getClave());
-                stm.setString(6, claveSHA);
-                stm.setString(7, u.getDireccion());
-                stm.execute();
-                return Response.status(Response.Status.CREATED).entity("{}").build();
-
-            } catch (Exception ex) {
-                LOG.log(Level.SEVERE, "Error al registrar", ex);
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-
-            }
-        }
-    }
-
-    
+    @POST
     @Consumes("application/json; charset=utf-8")
     @Produces("application/json; charset=utf-8")
     public Response loginUsuario(Usuario u) {
         if (u.getCorreo().isEmpty() || u.getCorreo().isBlank()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
-        } else if (u.getCorreo().length() > 45) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-        }
-        if (u.getClave().isEmpty() || u.getClave().isBlank()) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un apellido").build();
-        } else if (u.getClave().length() > 45) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-
+            return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un correo").build();
+        } else if (u.getClave().isEmpty() || u.getClave().isBlank()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una clave").build();
         } else {
             try {
+
                 Connection con = this.ds.getConnection();
-                String sql = "SELECT * FROM usuario WHERE correo LIKE ? OR clave LIKE ? ";
+                String sql = "SELECT * FROM usuario WHERE correo = ? AND clave = ?";
                 PreparedStatement stm = con.prepareStatement(sql);
                 stm.setString(1, u.getCorreo());
                 String claveSHA = DigestUtils.sha256Hex(u.getClave());
                 stm.setString(2, claveSHA);
-                stm.execute();
-                return Response.status(Response.Status.CREATED).entity("{}").build();
+                ResultSet rs = stm.executeQuery();
+                if (rs.next()) {
+                    Integer idU = rs.getInt("idUsuario");
+                    String nom = rs.getString("nombre");
+                    String ape = rs.getString("apellido");
+                    String tel = rs.getString("telefono");
+                    String corr = rs.getString("correo");
+                    String direc = rs.getString("direccion");
+                    String foto = rs.getString("foto");
 
+                    Usuario usu = new Usuario(idU, nom, ape, tel, corr, null, direc, foto);
+                    return Response.status(Response.Status.OK).entity(usu).build();
+                }else{
+                    return Response.status(Response.Status.BAD_REQUEST).entity(new Error("Error de usuario o contraseña")).build();
+                }
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error al ingresar", ex);
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Error(ex.getMessage())).build();
 
             }
         }
-
     }
+
 }
