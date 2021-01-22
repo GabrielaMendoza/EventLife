@@ -5,6 +5,7 @@
  */
 package com.mycompany.prueba;
 
+import com.mycompany.prueba.dto.ErrorApi;
 import com.mycompany.prueba.dto.Evento;
 import com.mycompany.prueba.dto.Items;
 import java.sql.Connection;
@@ -114,7 +115,7 @@ public class EventoResource {
                 Evento e = new Evento(idE, nom, des, feInicio, feFin, tel, coLo, coLati, idC, idU);
                 return Response.status(Response.Status.OK).entity(e).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al obtener evento")).build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al consultar evento por id", ex);
@@ -264,7 +265,7 @@ public class EventoResource {
             stm.execute();
             int afectados = stm.getUpdateCount();
             if (afectados == 0) {
-                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al eliminar ")).build();
             } else {
                 return Response.status(Response.Status.OK).entity("{}").build();
             }

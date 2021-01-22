@@ -5,6 +5,7 @@
  */
 package com.mycompany.prueba;
 
+import com.mycompany.prueba.dto.ErrorApi;
 import com.mycompany.prueba.dto.Items;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -73,7 +74,7 @@ public class ItemsResource {
                 Items i = new Items(idI, nom, des, foto, pre, idE);
                 lista.add(i);
             }
-            return Response.status(Response.Status.OK).entity(lista).build();
+            return Response.status(Response.Status.OK).entity(lista).entity(new ErrorApi("Error al obtener")).build();
 
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al consultar por items", ex);
@@ -106,7 +107,7 @@ public class ItemsResource {
 
                 return Response.status(Response.Status.OK).entity(i).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al obtener items")).build();
             }
 
         } catch (Exception ex) {
@@ -195,7 +196,7 @@ public class ItemsResource {
             stm.execute();
             int afectados = stm.getUpdateCount();
             if (afectados == 0) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al eliminar ")).build();
             } else {
                 return Response.status(Response.Status.OK).entity("{}").build();
             }

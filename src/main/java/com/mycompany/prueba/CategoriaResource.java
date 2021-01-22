@@ -6,6 +6,7 @@
 package com.mycompany.prueba;
 
 import com.mycompany.prueba.dto.Categoria;
+import com.mycompany.prueba.dto.ErrorApi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -102,7 +103,7 @@ public class CategoriaResource {
 
                 return Response.status(Response.Status.OK).entity(c).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al obtener categoria ")).build();
             }
 
         } catch (Exception ex) {
@@ -185,7 +186,7 @@ public class CategoriaResource {
             stm.execute();
             int afectados = stm.getUpdateCount();
             if (afectados == 0) {
-                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al eliminar ")).build();
             } else {
                 return Response.status(Response.Status.OK).entity("{}").build();
             }

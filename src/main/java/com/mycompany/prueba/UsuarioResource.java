@@ -5,6 +5,7 @@
  */
 package com.mycompany.prueba;
 
+import com.mycompany.prueba.dto.ErrorApi;
 import com.mycompany.prueba.dto.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -116,7 +117,7 @@ public class UsuarioResource {
                 Usuario u = new Usuario(idU, nom, ape, tel, corr, null, direc, foto);
                 return Response.status(Response.Status.OK).entity(u).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity(new Error("Error de usuario o contraseña")).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al obbtener usuario ")).build();
             }
 
         } catch (Exception ex) {
@@ -238,7 +239,7 @@ public class UsuarioResource {
             stm.execute();
             int afectados = stm.getUpdateCount();
             if (afectados == 0) {
-                return Response.status(Response.Status.NOT_FOUND).entity(new Error("Error al eliminar")).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(new ErrorApi("Error al eliminar")).build();
             } else {
                 return Response.status(Response.Status.OK).entity("{}").build();
             }

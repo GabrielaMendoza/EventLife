@@ -5,6 +5,7 @@
  */
 package com.mycompany.prueba;
 
+import com.mycompany.prueba.dto.ErrorApi;
 import com.mycompany.prueba.dto.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,11 +75,11 @@ public class LoginResource {
                     Usuario usu = new Usuario(idU, nom, ape, tel, corr, null, direc, foto);
                     return Response.status(Response.Status.OK).entity(usu).build();
                 }else{
-                    return Response.status(Response.Status.BAD_REQUEST).entity(new Error("Error de usuario o contraseña")).build();
+                    return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorApi("Error de usuario o contraseña")).build();
                 }
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Error al ingresar", ex);
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Error(ex.getMessage())).build();
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorApi(ex.getMessage())).build();
 
             }
         }

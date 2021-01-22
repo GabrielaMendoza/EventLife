@@ -4,11 +4,11 @@ package com.mycompany.prueba.dto;
  *
  * @author l
  */
-public class Error {
+public class ErrorApi {
 
     private String error;
 
-    public Error(String error) {
+    public ErrorApi(String error) {
         this.error = error;
     }
 
