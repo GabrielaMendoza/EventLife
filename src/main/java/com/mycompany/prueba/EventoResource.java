@@ -166,7 +166,7 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             }else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO evento(nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud, idCategoria, idUsuario)VALUE(?,?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO evento(nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud)VALUE(?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
 
                 stm.setString(1, e.getNombre());
@@ -176,8 +176,6 @@ public class EventoResource {
                 stm.setString(5, e.getTelefono());
                 stm.setString(6, e.getCoordenadaLongitud());
                 stm.setString(7, e.getCoordenadaLatitud());
-                stm.setInt(8, e.getIdCategoria());
-                stm.setInt(9, e.getIdUsuario());
                 stm.execute();
 
                 return Response.status(Response.Status.CREATED).entity("{}").build();

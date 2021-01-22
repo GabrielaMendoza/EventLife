@@ -129,11 +129,10 @@ public class CategoriaResource {
             }
             else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO categoria(idCategoria, nombre, descripcion)VALUE(?,?,?)";
+                String sql = "INSERT INTO categoria(nombre, descripcion)VALUE(?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
-                stm.setInt(1, c.getIdCategoria());
-                stm.setString(2, c.getNombre());
-                stm.setString(3, c.getDescripcion());
+                stm.setString(1, c.getNombre());
+                stm.setString(2, c.getDescripcion());
                 stm.execute();
                 return Response.status(Response.Status.CREATED).entity("{}").build();
             }

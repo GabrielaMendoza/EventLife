@@ -132,14 +132,13 @@ public class ItemsResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO items(idItems, nombre, descripcion, foto, precio,IdEvento)VALUE(?,?,?,?,?,?)";
+                String sql = "INSERT INTO items( nombre, descripcion, foto, precio)VALUE(?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
-                stm.setInt(1, i.getIdItems());
-                stm.setString(2, i.getNombre());
-                stm.setString(3, i.getDescripcion());
-                stm.setString(4, i.getFoto());
-                stm.setInt(5, i.getPrecio());
-                stm.setInt(6, i.getIdEvento());
+                stm.setString(1, i.getNombre());
+                stm.setString(2, i.getDescripcion());
+                stm.setString(3, i.getFoto());
+                stm.setInt(4, i.getPrecio());
+
                 stm.execute();
                 return Response.status(Response.Status.CREATED).entity("{}").build();
             }

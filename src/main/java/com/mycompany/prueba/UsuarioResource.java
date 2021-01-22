@@ -157,17 +157,17 @@ public class UsuarioResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO usuario(idUsuario, nombre, apellido, telefono, correo, clave, direccion, foto)VALUE(?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO usuario( nombre, apellido, telefono, correo, clave, direccion, foto)VALUE(?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
-                stm.setInt(1, u.getIdUsuario());
-                stm.setString(2, u.getNombre());
-                stm.setString(3, u.getApellido());
-                stm.setString(4, u.getTelefono());
-                stm.setString(5, u.getCorreo());
+                
+                stm.setString(1, u.getNombre());
+                stm.setString(2, u.getApellido());
+                stm.setString(3, u.getTelefono());
+                stm.setString(4, u.getCorreo());
                 String claveSHA = DigestUtils.sha256Hex(u.getClave());
-                stm.setString(6, claveSHA);
-                stm.setString(7, u.getDireccion());
-                stm.setString(8, u.getFoto());
+                stm.setString(5, claveSHA);
+                stm.setString(6, u.getDireccion());
+                stm.setString(7, u.getFoto());
                 stm.execute();
                 return Response.status(Response.Status.CREATED).entity("{}").build();
             }
