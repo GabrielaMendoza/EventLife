@@ -71,23 +71,25 @@ public class LoginResource {
                 return Response.status(Response.Status.CREATED).entity("{}").build();
 
             } catch (Exception ex) {
-                LOG.log(Level.SEVERE, "Error al registrar login", ex);
+                LOG.log(Level.SEVERE, "Error al registrar", ex);
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 
             }
         }
     }
-         @Produces("application/json; charset=utf-8")
 
-        public Response loginUsuario(Usuario u) {
+    
+    @Consumes("application/json; charset=utf-8")
+    @Produces("application/json; charset=utf-8")
+    public Response loginUsuario(Usuario u) {
         if (u.getCorreo().isEmpty() || u.getCorreo().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
         } else if (u.getCorreo().length() > 45) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
         }
-        if (u..isEmpty() || u.getApellido().isBlank()) {
+        if (u.getClave().isEmpty() || u.getClave().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un apellido").build();
-        } else if (u.getApellido().length() > 45) {
+        } else if (u.getClave().length() > 45) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
 
         } else {
@@ -95,9 +97,9 @@ public class LoginResource {
                 Connection con = this.ds.getConnection();
                 String sql = "SELECT * FROM usuario WHERE correo LIKE ? OR clave LIKE ? ";
                 PreparedStatement stm = con.prepareStatement(sql);
-                stm.setString(5, u.getCorreo());
+                stm.setString(1, u.getCorreo());
                 String claveSHA = DigestUtils.sha256Hex(u.getClave());
-                stm.setString(6, claveSHA);
+                stm.setString(2, claveSHA);
                 stm.execute();
                 return Response.status(Response.Status.CREATED).entity("{}").build();
 
@@ -107,6 +109,6 @@ public class LoginResource {
 
             }
         }
-        
-}
+
+    }
 }
