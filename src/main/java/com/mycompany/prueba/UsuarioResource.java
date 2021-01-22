@@ -63,9 +63,10 @@ public class UsuarioResource {
 
                 rs = stm.executeQuery(sql);
             } else {
-                String sql = "SELECT * FROM usuario WHERE nombre LIKE ?";
+                String sql = "SELECT * FROM usuario WHERE nombre LIKE ? OR apellido LIKE ?";
                 PreparedStatement stm = con.prepareStatement(sql);
                 stm.setString(1, "%" + query + "%");
+                stm.setString(2, "%" + query + "%");
             }
             while (rs.next()) {
                 Integer idU = rs.getInt("idUsuario");
@@ -115,7 +116,7 @@ public class UsuarioResource {
                 Usuario u = new Usuario(idU, nom, ape, tel, corr, null, direc, foto);
                 return Response.status(Response.Status.OK).entity(u).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
             }
 
         } catch (Exception ex) {
@@ -127,29 +128,34 @@ public class UsuarioResource {
 
     @POST
     @Consumes("application/json; charset=utf-8")
+    @Produces("application/json; charset=utf-8")
     public Response postUsuario(Usuario u) {
         try {
-            if (u.getNombre().isEmpty()|| u.getNombre().isBlank()) {
+            if (u.getNombre().isEmpty() || u.getNombre().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
             } else if (u.getNombre().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }  if (u.getApellido().isEmpty()|| u.getApellido().isBlank()) {
+            }
+            if (u.getApellido().isEmpty() || u.getApellido().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un apellido").build();
             } else if (u.getApellido().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } if (u.getCorreo().isEmpty()|| u.getCorreo().isBlank()) {
+            }
+            if (u.getCorreo().isEmpty() || u.getCorreo().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un correo").build();
             } else if (u.getCorreo().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } if (u.getTelefono().isEmpty()|| u.getTelefono().isBlank()) {
+            }
+            if (u.getTelefono().isEmpty() || u.getTelefono().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita numero de telefono").build();
             } else if (u.getTelefono().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } if (u.getClave().isEmpty()|| u.getClave().isBlank()) {
+            }
+            if (u.getClave().isEmpty() || u.getClave().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una clave").build();
             } else if (u.getClave().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }  else {
+            } else {
                 Connection con = this.ds.getConnection();
                 String sql = "INSERT INTO usuario(idUsuario, nombre, apellido, telefono, correo, clave, direccion, foto)VALUE(?,?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
@@ -163,7 +169,7 @@ public class UsuarioResource {
                 stm.setString(7, u.getDireccion());
                 stm.setString(8, u.getFoto());
                 stm.execute();
-                return Response.status(Response.Status.CREATED).build();
+                return Response.status(Response.Status.CREATED).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al registrar nombre", ex);
@@ -173,6 +179,7 @@ public class UsuarioResource {
     }
 
     @PUT
+    @Produces("application/json; charset=utf-8")
     @Consumes("application/json; charset=utf-8")
     public Response putUsuario(Usuario u) {
         try {
@@ -180,15 +187,18 @@ public class UsuarioResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
             } else if (u.getNombre().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }  if (u.getApellido().isEmpty()|| u.getApellido().isBlank()) {
+            }
+            if (u.getApellido().isEmpty() || u.getApellido().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un apellido").build();
             } else if (u.getApellido().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } if (u.getCorreo().isEmpty()|| u.getCorreo().isBlank()) {
+            }
+            if (u.getCorreo().isEmpty() || u.getCorreo().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un correo").build();
             } else if (u.getCorreo().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } if (u.getClave().isEmpty()|| u.getClave().isBlank()) {
+            }
+            if (u.getClave().isEmpty() || u.getClave().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una clave").build();
             } else if (u.getClave().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
@@ -206,7 +216,7 @@ public class UsuarioResource {
                 stm.setString(7, u.getFoto());
                 stm.setInt(8, u.getIdUsuario());
                 stm.execute();
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al editar", ex);
@@ -216,7 +226,9 @@ public class UsuarioResource {
     }
 
     @DELETE
+    @Produces("application/json; charset=utf-8")
     @Path("{idU}")
+
     public Response deleteUsuario(@PathParam("idU") Integer idUsuario) {
         try {
             Connection con = this.ds.getConnection();
@@ -226,9 +238,9 @@ public class UsuarioResource {
             stm.execute();
             int afectados = stm.getUpdateCount();
             if (afectados == 0) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
             } else {
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al eliminar", ex);

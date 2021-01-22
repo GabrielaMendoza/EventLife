@@ -5,7 +5,6 @@
  */
 package com.mycompany.prueba;
 
-
 import com.mycompany.prueba.dto.Evento;
 import com.mycompany.prueba.dto.Items;
 import java.sql.Connection;
@@ -115,7 +114,7 @@ public class EventoResource {
                 Evento e = new Evento(idE, nom, des, feInicio, feFin, tel, coLo, coLati, idC, idU);
                 return Response.status(Response.Status.OK).entity(e).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al consultar evento por id", ex);
@@ -126,6 +125,7 @@ public class EventoResource {
 
     @POST
     @Consumes("application/json; charset=utf-8")
+    @Produces("application/json; charset=utf-8")
     public Response postEvento(Evento e) {
         try {
             if (e.getNombre().isEmpty() || e.getNombre().isBlank()) {
@@ -137,11 +137,38 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un descripcion").build();
             } else if (e.getDescripcion().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } else {
+            }  if (e.getCoordenadaLatitud().isEmpty() || e.getCoordenadaLatitud().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una coordenada de lattud").build();
+            } else if (e.getCoordenadaLatitud().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }
+            if (e.getCoordenadaLatitud().isEmpty() || e.getCoordenadaLatitud().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una coordenada de lattud").build();
+            } else if (e.getCoordenadaLatitud().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }if (e.getCoordenadaLongitud().isEmpty() || e.getCoordenadaLongitud().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un descripcion").build();
+            } else if (e.getCoordenadaLongitud().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+                
+            }  if (e.getFechaHoraInicio().isEmpty() || e.getFechaHoraInicio().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de inicio").build();
+            } else if (e.getFechaHoraInicio().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }
+            if (e.getFechaHoraFin().isEmpty() || e.getFechaHoraFin().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de cierre").build();
+            } else if (e.getFechaHoraFin().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }  if (e.getTelefono().isEmpty() || e.getTelefono().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un numero de telefono").build();
+            } else if (e.getTelefono().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }else {
                 Connection con = this.ds.getConnection();
                 String sql = "INSERT INTO evento(nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud, idCategoria, idUsuario)VALUE(?,?,?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
-               
+
                 stm.setString(1, e.getNombre());
                 stm.setString(2, e.getDescripcion());
                 stm.setString(3, e.getFechaHoraInicio());
@@ -153,7 +180,7 @@ public class EventoResource {
                 stm.setInt(9, e.getIdUsuario());
                 stm.execute();
 
-                return Response.status(Response.Status.CREATED).build();
+                return Response.status(Response.Status.CREATED).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al registrar nombre", ex);
@@ -164,6 +191,7 @@ public class EventoResource {
 
     @PUT
     @Consumes("application/json; charset=utf-8")
+    @Produces("application/json; charset=utf-8")
     public Response putEvento(Evento e) {
         try {
             if (e.getNombre().isEmpty() || e.getNombre().isBlank()) {
@@ -175,7 +203,32 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un descripcion").build();
             } else if (e.getDescripcion().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            } 
+            if (e.getCoordenadaLatitud().isEmpty() || e.getCoordenadaLatitud().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una coordenada de lattud").build();
+            } else if (e.getCoordenadaLatitud().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }
+            if (e.getCoordenadaLongitud().isEmpty() || e.getCoordenadaLongitud().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una Coordenada de Longitud").build();
+            } else if (e.getCoordenadaLongitud().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+                
+            }  if (e.getFechaHoraInicio().isEmpty() || e.getFechaHoraInicio().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de inicio").build();
+            } else if (e.getFechaHoraInicio().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }
+            if (e.getFechaHoraFin().isEmpty() || e.getFechaHoraFin().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de cierre").build();
+            } else if (e.getFechaHoraFin().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+            }  if (e.getTelefono().isEmpty() || e.getTelefono().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un numero de telefono").build();
+            } else if (e.getTelefono().length() > 45) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
+                
                 Connection con = this.ds.getConnection();
                 String sql = "UPDATE evento SET  nombre = ?, descripcion = ?, fecha_hora_inicio=?, fecha_hora_fin=?, telefono = ?, coordenada_longitud=?, coordenada_latitud=?, idCategoria=?, idUsuario =?  WHERE idEvento = ?";
                 PreparedStatement stm = con.prepareStatement(sql);
@@ -192,7 +245,7 @@ public class EventoResource {
                 stm.setInt(10, e.getIdEvento());
                 stm.execute();
 
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al editar", ex);
@@ -203,6 +256,7 @@ public class EventoResource {
 
     @DELETE
     @Path("{idE}")
+    @Produces("application/json; charset=utf-8")
     public Response deleteEvento(@PathParam("idE") Integer idEvento) {
         try {
             Connection con = this.ds.getConnection();
@@ -212,9 +266,9 @@ public class EventoResource {
             stm.execute();
             int afectados = stm.getUpdateCount();
             if (afectados == 0) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
             } else {
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al eliminar", ex);
@@ -230,7 +284,7 @@ public class EventoResource {
         try {
             ArrayList<Items> lista = new ArrayList<>();
             Connection con = this.ds.getConnection();
-            
+
             if (idi == null) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("ID de evento inválido").build();
             } else {
@@ -239,15 +293,15 @@ public class EventoResource {
                 stm.setInt(1, idi);
                 ResultSet rs = stm.executeQuery();
                 while (rs.next()) {
-                Integer idI = rs.getInt("idItems");
-                String nom = rs.getString("nombre");
-                String des = rs.getString("descripcion");
-                String foto = rs.getString("foto");
-                Integer pre = rs.getInt("precio");
-                Integer idE = rs.getInt("idEvento");
+                    Integer idI = rs.getInt("idItems");
+                    String nom = rs.getString("nombre");
+                    String des = rs.getString("descripcion");
+                    String foto = rs.getString("foto");
+                    Integer pre = rs.getInt("precio");
+                    Integer idE = rs.getInt("idEvento");
 
-                Items i = new Items(idI, nom, des, foto, pre, idE);
-                    
+                    Items i = new Items(idI, nom, des, foto, pre, idE);
+
                     lista.add(i);
                 }
                 return Response.status(Response.Status.OK).entity(lista).build();

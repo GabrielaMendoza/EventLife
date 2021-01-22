@@ -118,6 +118,7 @@ public class ItemsResource {
 
     @POST
     @Consumes("application/json; charset=utf-8")
+    @Produces("application/json; charset=utf-8")
     public Response postItems(Items i) {
         try {
             if (i.getNombre().isEmpty() || i.getNombre().isBlank()) {
@@ -140,7 +141,7 @@ public class ItemsResource {
                 stm.setInt(5, i.getPrecio());
                 stm.setInt(6, i.getIdEvento());
                 stm.execute();
-                return Response.status(Response.Status.CREATED).build();
+                return Response.status(Response.Status.CREATED).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al registrar items", ex);
@@ -151,6 +152,7 @@ public class ItemsResource {
 
     @PUT
     @Consumes("application/json; charset=utf-8")
+    @Produces("application/json; charset=utf-8")
     public Response putItems(Items i) {
         try {
             if (i.getNombre().isEmpty() || i.getNombre().isBlank()) {
@@ -173,7 +175,7 @@ public class ItemsResource {
                 stm.setInt(5, i.getIdEvento());
                 stm.setInt(6, i.getIdItems());
                 stm.execute();
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al editar items", ex);
@@ -184,6 +186,7 @@ public class ItemsResource {
 
     @DELETE
     @Path("{idI}")
+    @Produces("application/json; charset=utf-8")
     public Response deleteItems(@PathParam("idI") Integer idItems) {
         try {
             Connection con = this.ds.getConnection();
@@ -195,7 +198,7 @@ public class ItemsResource {
             if (afectados == 0) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             } else {
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al eliminar items", ex);

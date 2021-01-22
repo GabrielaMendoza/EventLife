@@ -102,7 +102,7 @@ public class CategoriaResource {
 
                 return Response.status(Response.Status.OK).entity(c).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
             }
 
         } catch (Exception ex) {
@@ -114,6 +114,7 @@ public class CategoriaResource {
 
     @POST
     @Consumes("application/json; charset=utf-8")
+     @Produces("application/json; charset=utf-8")
     public Response postCategoria(Categoria c) {
         try {
             if (c.getNombre().isEmpty() || c.getNombre().isBlank()) {
@@ -125,7 +126,8 @@ public class CategoriaResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una descripcion").build();
             } else if (c.getDescripcion().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } else {
+            }
+            else {
                 Connection con = this.ds.getConnection();
                 String sql = "INSERT INTO categoria(idCategoria, nombre, descripcion)VALUE(?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
@@ -133,7 +135,7 @@ public class CategoriaResource {
                 stm.setString(2, c.getNombre());
                 stm.setString(3, c.getDescripcion());
                 stm.execute();
-                return Response.status(Response.Status.CREATED).build();
+                return Response.status(Response.Status.CREATED).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al registrar categoria", ex);
@@ -144,6 +146,7 @@ public class CategoriaResource {
 
     @PUT
     @Consumes("application/json; charset=utf-8")
+     @Produces("application/json; charset=utf-8")
     public Response putCategoria(Categoria c) {
         try {
             if (c.getNombre().isEmpty() || c.getNombre().isBlank()) {
@@ -163,7 +166,7 @@ public class CategoriaResource {
                 stm.setString(2, c.getDescripcion());
                 stm.setInt(3, c.getIdCategoria());
                 stm.execute();
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al editar categoria", ex);
@@ -171,6 +174,7 @@ public class CategoriaResource {
 
         }
     }
+     @Produces("application/json; charset=utf-8")
      @DELETE
     @Path("{idC}")
     public Response deleteCategoria(@PathParam("idC") Integer idCategoria) {
@@ -182,9 +186,9 @@ public class CategoriaResource {
             stm.execute();
             int afectados = stm.getUpdateCount();
             if (afectados == 0) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response.status(Response.Status.NOT_FOUND).entity("{}").build();
             } else {
-                return Response.status(Response.Status.OK).build();
+                return Response.status(Response.Status.OK).entity("{}").build();
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al eliminar categoria", ex);

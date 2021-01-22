@@ -27,6 +27,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.mycompany.prueba.CategoriaResource.class);
         resources.add(com.mycompany.prueba.EventoResource.class);
         resources.add(com.mycompany.prueba.ItemsResource.class);
+        resources.add(com.mycompany.prueba.LoginResource.class);
         resources.add(com.mycompany.prueba.UsuarioResource.class);
     }
     
