@@ -131,7 +131,12 @@ public class ItemsResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una descripcion").build();
             } else if (i.getDescripcion().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } else {
+            }
+                if (i.getFoto().isEmpty() || i.getFoto().isBlank()) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
+                } else if (i.getFoto().length() > 45) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+                }else {
                 Connection con = this.ds.getConnection();
                 String sql = "INSERT INTO items( nombre, descripcion, foto, precio)VALUE(?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
@@ -164,7 +169,12 @@ public class ItemsResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una descripcion").build();
             } else if (i.getDescripcion().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } else {
+            }
+             if (i.getFoto().isEmpty() || i.getFoto().isBlank()) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un nombre").build();
+                } else if (i.getFoto().length() > 45) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
+                }else {
                 Connection con = this.ds.getConnection();
                 String sql = "UPDATE items SET  nombre = ?, descripcion = ?,foto = ?, precio = ?,IdEvento=? WHERE idItems = ?";
                 PreparedStatement stm = con.prepareStatement(sql);
