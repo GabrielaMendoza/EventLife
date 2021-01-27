@@ -6,6 +6,7 @@
 package com.mycompany.prueba;
 
 import com.mycompany.prueba.dto.ErrorApi;
+import com.mycompany.prueba.dto.Evento;
 import com.mycompany.prueba.dto.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -160,7 +161,7 @@ public class UsuarioResource {
                 Connection con = this.ds.getConnection();
                 String sql = "INSERT INTO usuario( nombre, apellido, telefono, correo, clave, direccion, foto)VALUE(?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
-                
+
                 stm.setString(1, u.getNombre());
                 stm.setString(2, u.getApellido());
                 stm.setString(3, u.getTelefono());
@@ -245,6 +246,47 @@ public class UsuarioResource {
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al eliminar", ex);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+
+        }
+    }
+
+    @GET
+    @Path("{ide}/evento")
+    @Produces("application/json; charset=utf-8")
+    public Response getItemsPorEvento(@PathParam("ide") Integer ide) {
+        try {
+            ArrayList<Evento> lista = new ArrayList<>();
+            Connection con = this.ds.getConnection();
+
+            if (ide == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("ID de evento inválido").build();
+            } else {
+                String sql = "SELECT * FROM evento WHERE idUsuario = ?";;
+                PreparedStatement stm = con.prepareStatement(sql);
+                stm.setInt(1, ide);
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    Integer idE = rs.getInt("idEvento");
+                    String nom = rs.getString("nombre");
+                    String des = rs.getString("descripcion");
+                    String feInicio = rs.getString("fecha_hora_inicio");
+                    String feFin = rs.getString("fecha_hora_fin");
+                    String tel = rs.getString("telefono");
+                    String coLo = rs.getString("coordenada_longitud");
+                    String coLati = rs.getString("coordenada_latitud");
+                    Integer idC = rs.getInt("idCategoria");
+                    Integer idU = rs.getInt("idUsuario");
+
+                    Evento e = new Evento(idE, nom, des, feInicio, feFin, tel, coLo, coLati, idC, idU);
+
+                    lista.add(e);
+                }
+                return Response.status(Response.Status.OK).entity(lista).build();
+            }
+
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Error al consultar ", ex);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 
         }
