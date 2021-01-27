@@ -74,7 +74,7 @@ public class ItemsResource {
                 Items i = new Items(idI, nom, des, foto, pre, idE);
                 lista.add(i);
             }
-            return Response.status(Response.Status.OK).entity(lista).entity(new ErrorApi("Error al obtener")).build();
+            return Response.status(Response.Status.OK).entity(lista).build();
 
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al consultar por items", ex);
