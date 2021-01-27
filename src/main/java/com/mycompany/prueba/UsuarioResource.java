@@ -252,7 +252,7 @@ public class UsuarioResource {
     }
 
     @GET
-    @Path("{ide}/evento")
+    @Path("{ide}/eventos")
     @Produces("application/json; charset=utf-8")
     public Response getItemsPorEvento(@PathParam("ide") Integer ide) {
         try {
@@ -262,7 +262,7 @@ public class UsuarioResource {
             if (ide == null) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("ID de evento inválido").build();
             } else {
-                String sql = "SELECT * FROM evento WHERE idUsuario = ?";;
+                String sql = "SELECT * FROM evento WHERE idUsuario = ?";
                 PreparedStatement stm = con.prepareStatement(sql);
                 stm.setInt(1, ide);
                 ResultSet rs = stm.executeQuery();
