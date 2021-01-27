@@ -155,8 +155,6 @@ public class UsuarioResource {
             }
             if (u.getClave().isEmpty() || u.getClave().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una clave").build();
-            } else if (u.getClave().length() > 45) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
                 Connection con = this.ds.getConnection();
                 String sql = "INSERT INTO usuario( nombre, apellido, telefono, correo, clave, direccion, foto)VALUE(?,?,?,?,?,?,?)";
@@ -199,26 +197,37 @@ public class UsuarioResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un correo").build();
             } else if (u.getCorreo().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }
-            if (u.getClave().isEmpty() || u.getClave().isBlank()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una clave").build();
-            } else if (u.getClave().length() > 45) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
-                Connection con = this.ds.getConnection();
-                String sql = "UPDATE usuario SET  nombre = ?, apellido = ?, telefono = ?, correo = ?, clave = ?, direccion = ?, foto= ? WHERE idUsuario = ?";
-                PreparedStatement stm = con.prepareStatement(sql);
-                stm.setString(1, u.getNombre());
-                stm.setString(2, u.getApellido());
-                stm.setString(3, u.getTelefono());
-                stm.setString(4, u.getCorreo());
-                String claveSHA = DigestUtils.sha256Hex(u.getClave());
-                stm.setString(5, claveSHA);
-                stm.setString(6, u.getDireccion());
-                stm.setString(7, u.getFoto());
-                stm.setInt(8, u.getIdUsuario());
-                stm.execute();
-                return Response.status(Response.Status.OK).entity("{}").build();
+                if (u.getClave().isEmpty() || u.getClave().isBlank()) {
+                    Connection con = this.ds.getConnection();
+                    String sql = "UPDATE usuario SET  nombre = ?, apellido = ?, telefono = ?, correo = ?, direccion = ?, foto= ? WHERE idUsuario = ?";
+                    PreparedStatement stm = con.prepareStatement(sql);
+                    stm.setString(1, u.getNombre());
+                    stm.setString(2, u.getApellido());
+                    stm.setString(3, u.getTelefono());
+                    stm.setString(4, u.getCorreo());
+                    stm.setString(5, u.getDireccion());
+                    stm.setString(6, u.getFoto());
+                    stm.setInt(7, u.getIdUsuario());
+                    stm.execute();
+                    return Response.status(Response.Status.OK).entity("{}").build();
+                } else {
+                    Connection con = this.ds.getConnection();
+                    String sql = "UPDATE usuario SET  nombre = ?, apellido = ?, telefono = ?, correo = ?, clave = ?, direccion = ?, foto= ? WHERE idUsuario = ?";
+                    PreparedStatement stm = con.prepareStatement(sql);
+                    stm.setString(1, u.getNombre());
+                    stm.setString(2, u.getApellido());
+                    stm.setString(3, u.getTelefono());
+                    stm.setString(4, u.getCorreo());
+                    String claveSHA = DigestUtils.sha256Hex(u.getClave());
+                    stm.setString(5, claveSHA);
+                    stm.setString(6, u.getDireccion());
+                    stm.setString(7, u.getFoto());
+                    stm.setInt(8, u.getIdUsuario());
+                    stm.execute();
+                    return Response.status(Response.Status.OK).entity("{}").build();
+                }
+
             }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Error al editar", ex);
