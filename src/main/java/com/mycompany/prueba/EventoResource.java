@@ -138,7 +138,8 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un descripcion").build();
             } else if (e.getDescripcion().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }  if (e.getCoordenadaLatitud().isEmpty() || e.getCoordenadaLatitud().isBlank()) {
+            }
+            if (e.getCoordenadaLatitud().isEmpty() || e.getCoordenadaLatitud().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una coordenada de lattud").build();
             } else if (e.getCoordenadaLatitud().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
@@ -147,12 +148,14 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una coordenada de lattud").build();
             } else if (e.getCoordenadaLatitud().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }if (e.getCoordenadaLongitud().isEmpty() || e.getCoordenadaLongitud().isBlank()) {
+            }
+            if (e.getCoordenadaLongitud().isEmpty() || e.getCoordenadaLongitud().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un descripcion").build();
             } else if (e.getCoordenadaLongitud().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-                
-            }  if (e.getFechaHoraInicio().isEmpty() || e.getFechaHoraInicio().isBlank()) {
+
+            }
+            if (e.getFechaHoraInicio().isEmpty() || e.getFechaHoraInicio().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de inicio").build();
             } else if (e.getFechaHoraInicio().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
@@ -161,15 +164,17 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de cierre").build();
             } else if (e.getFechaHoraFin().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }  if (e.getTelefono().isEmpty() || e.getTelefono().isBlank()) {
+            }
+            if (e.getTelefono().isEmpty() || e.getTelefono().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un numero de telefono").build();
             } else if (e.getTelefono().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }else {
+            } else {
                 Connection con = this.ds.getConnection();
-                String sql = "INSERT INTO evento(nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud)VALUE(?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO evento(nombre, descripcion, fecha_hora_inicio, fecha_hora_fin, telefono, coordenada_longitud, coordenada_latitud, IdCategoria, IdUsuario)VALUE(?,?,?,?,?,?,?,?,?)";
                 PreparedStatement stm = con.prepareStatement(sql);
-
+                
+                
                 stm.setString(1, e.getNombre());
                 stm.setString(2, e.getDescripcion());
                 stm.setString(3, e.getFechaHoraInicio());
@@ -177,6 +182,8 @@ public class EventoResource {
                 stm.setString(5, e.getTelefono());
                 stm.setString(6, e.getCoordenadaLongitud());
                 stm.setString(7, e.getCoordenadaLatitud());
+                stm.setInt(8, e.getIdCategoria());
+                stm.setInt(9, e.getIdUsuario());
                 stm.execute();
 
                 return Response.status(Response.Status.CREATED).entity("{}").build();
@@ -202,7 +209,7 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un descripcion").build();
             } else if (e.getDescripcion().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            } 
+            }
             if (e.getCoordenadaLatitud().isEmpty() || e.getCoordenadaLatitud().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una coordenada de lattud").build();
             } else if (e.getCoordenadaLatitud().length() > 45) {
@@ -212,8 +219,9 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una Coordenada de Longitud").build();
             } else if (e.getCoordenadaLongitud().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-                
-            }  if (e.getFechaHoraInicio().isEmpty() || e.getFechaHoraInicio().isBlank()) {
+
+            }
+            if (e.getFechaHoraInicio().isEmpty() || e.getFechaHoraInicio().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de inicio").build();
             } else if (e.getFechaHoraInicio().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
@@ -222,12 +230,13 @@ public class EventoResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita una fecha de cierre").build();
             } else if (e.getFechaHoraFin().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
-            }  if (e.getTelefono().isEmpty() || e.getTelefono().isBlank()) {
+            }
+            if (e.getTelefono().isEmpty() || e.getTelefono().isBlank()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("se necesita un numero de telefono").build();
             } else if (e.getTelefono().length() > 45) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Logitud maxima de 45 caracteres").build();
             } else {
-                
+
                 Connection con = this.ds.getConnection();
                 String sql = "UPDATE evento SET  nombre = ?, descripcion = ?, fecha_hora_inicio=?, fecha_hora_fin=?, telefono = ?, coordenada_longitud=?, coordenada_latitud=?, idCategoria=?, idUsuario =?  WHERE idEvento = ?";
                 PreparedStatement stm = con.prepareStatement(sql);
